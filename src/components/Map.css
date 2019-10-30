@@ -1,0 +1,10 @@
+#mapid { 
+  margin: 1rem auto;
+}
+
+
+.leaflet-container {
+  height: 400px;
+  width: 400px;
+  margin: auto;
+}
