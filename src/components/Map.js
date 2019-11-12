@@ -1,59 +1,60 @@
 import React from 'react'
 import './Map.css'
-import { render } from 'react-dom'
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet'
-import heart from './../img/8-bit-heart-64.png'
-import AddPin from './AddPin.js'
+import Comments from './Comments'
 
-//function AddPin() {
-//  function handleClick(e) {
-//    e.preventDefault();
-//    console.log('The link was clicked.');
-//  }
-//
-//  return (
-//    <Marker position={[45.5003, -73.5671]}>
-//    </Marker>
-//    //<h1>
-//    //  <a href="#" onClick={handleClick}>Click me</a>
-//    //</h1>
-//  );
-//}
+class BaseMap extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      markers: [[45.5017, -73.567]]
+    };
+  }
 
+  addMarker = (e) => {
+    const {markers} = this.state
+    markers.push(e.latlng)
+    this.setState({markers})
+  }
 
-function AddImage() {
-  return (
-    <div>
-      <h1>Test Here</h1>
-      <img src={heart} />
-    </div>
-  )
-}
+  handleClick = (e) => {
+    alert('clicked')
+  }
 
-function BaseMap(props) {
-  return (
-    <Map center={props.position} zoom={15}>
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-      />
-      <Marker position={props.position}>
-        <Popup>Here are words I added<br />And now another line!
-          <AddImage />
-        </Popup>
-      </Marker>
+  handleFileSelected = e => {
+    console.log(e.target.files[0])
+  }
 
-      <AddPin />
-
-    </Map>
-  )
+  render() {
+    return (
+      <Map 
+        center={[45.5017, -73.567]} 
+        onClick={this.addMarker}
+        zoom={15} 
+        >
+        <TileLayer
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+        />
+        {this.state.markers.map((position, idx) => 
+          <Marker key={`marker-${idx}`} position={position}>
+          <Popup>
+            <span>Now we need to add<br/> image and text. <br /></span>
+            <button onClick={this.handleClick}>Add an image</button>
+            <input type="file" accept="image/*" onChange={this.handleFileSelected} />
+          </Popup>
+        </Marker>
+        )}
+      </Map>
+    );
+  }
 }
 
 function MontrealMap() {
   return (
     <div className="MontrealMap"> 
       <h1>Montreal Urban Art</h1>
-      <BaseMap position={[45.5017, -73.5673]} />
+      <BaseMap />
     </div>
   )
 }
